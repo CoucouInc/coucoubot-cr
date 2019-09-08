@@ -1,0 +1,21 @@
+name: coucoubot-cr
+version: 0.1.0
+
+authors:
+  - Simon Cruanes <simon.cruanes.2007@m4x.org>
+
+targets:
+  coucoubot-cr:
+    main: src/main.cr
+
+dependencies:
+  crirc:
+    github: c-cube/Crirc
+    branch: fix-ssl
+  redis:
+    github: stefanwille/crystal-redis
+    version: ~> 2.3.0
+
+crystal: 0.30.1
+
+license: MIT
