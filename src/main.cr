@@ -24,7 +24,7 @@ class Client
 end
 
 def main
-  c = Client.new(plugins: Plugins.all, chans: ["#test1234"])
+  c = Client.new(plugins: Plugins.all)
   c.start
   puts "main exit"
 end

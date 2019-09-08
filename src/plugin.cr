@@ -6,9 +6,6 @@ require "openssl"
 require "xml"
 require "./state"
 
-# TODO: contribute upstream
-require "./crog" # for parsing youtube metadata
-
 abstract class Plugin
   # Register to the given state's client
   abstract def register(st : State)
@@ -41,10 +38,9 @@ class CoucouPlugin < Plugin
       nick = extract_nick(msg.source)
       text = msg.message || next
       next if /^#{st.prefix}coucou/ =~ text # see previous command
-      if md = /\bcoucou\b/.match(text)
-        STDERR.puts "detected #{md.size} coucous from #{nick}"
-        st.redis.incrby(k_coucou(nick), md.size)
-      end
+      n = text.scan(/\bcoucou\b/).size
+      STDERR.puts "detected #{n} coucous from #{nick}"
+      st.redis.incrby(k_coucou(nick), n)
     end
   end
 end
@@ -97,6 +93,7 @@ class YTPlugin < Plugin
 
         STDERR.puts "got yt search #{ query }, use uri #{ uri }"
 
+        # TODO: make this work, ugh
         begin
           content = HTTP::Client.get(uri, tls: OpenSSL::SSL::Context::Client.insecure).body
           #meta = Crog::Parse.new(uri, tls: OpenSSL::SSL::Context::Client.insecure)
